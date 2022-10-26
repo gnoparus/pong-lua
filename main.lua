@@ -28,6 +28,12 @@ function love.load()
     scoreFont = love.graphics.newFont('font.ttf', 32)
     love.graphics.setFont(smallFont)
 
+    sounds = {
+        ['paddle_hit'] = love.audio.newSource('sounds/paddle_hit.wav', 'static'),
+        ['score'] = love.audio.newSource('sounds/score.wav', 'static'),
+        ['wall_hit'] = love.audio.newSource('sounds/wall_hit.wav', 'static')
+    }
+
     push:setupScreen(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT, {
         fullscreen = false,
         resizable = false,
@@ -66,6 +72,7 @@ function love.update(dt)
             else
                 ball.dy = -math.random(10, 150)
             end
+            sounds['paddle_hit']:play()
         end
 
         -- bounce player2
@@ -78,15 +85,18 @@ function love.update(dt)
             else
                 ball.dy = -math.random(10, 150)
             end
+            sounds['paddle_hit']:play()
         end
 
         -- bounce upper bottom wall
         if ball.y <= 0 then
             ball.y = 0
             ball.dy = -ball.dy
+            sounds['wall_hit']:play()
         elseif ball.y >= (VIRTUAL_HEIGHT - 4) then
             ball.y = VIRTUAL_HEIGHT - 4
             ball.dy = -ball.dy
+            sounds['wall_hit']:play()
         end
     end
 
@@ -102,6 +112,7 @@ function love.update(dt)
         else
             gameState = 'serve'
         end
+        sounds['score']:play()
     end
 
     -- ball pass player2
@@ -115,6 +126,7 @@ function love.update(dt)
         else
             gameState = 'serve'
         end
+        sounds['score']:play()
     end
 
     -- move player1
